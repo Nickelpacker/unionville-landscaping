@@ -1,0 +1,6 @@
+{
+    "name": "unionville-landscaping-worker",
+    "main": "src/index.ts",      // or "src/index.js"
+    "compatibility_date": "2025-12-10"
+}
+  
