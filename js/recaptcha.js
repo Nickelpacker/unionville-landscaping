@@ -1,6 +1,6 @@
 // reCAPTCHA Configuration
 // TODO: Replace with your reCAPTCHA Site Key from https://www.google.com/recaptcha/admin
-const RECAPTCHA_SITE_KEY = 'YOUR_RECAPTCHA_SITE_KEY';
+const RECAPTCHA_SITE_KEY = '6Lf_0yYsAAAAAKzLkbAsChNQ0x6Lf-J4FyqpTWwl';
 
 // reCAPTCHA callback functions
 window.onRecaptchaSuccess = function() {
