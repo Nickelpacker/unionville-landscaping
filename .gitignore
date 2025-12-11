@@ -5,4 +5,7 @@ EMAILAPI/
 # But keep README.md
 !README.md
 
+# Ignore debug folder
+debug/
+
 

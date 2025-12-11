@@ -159,13 +159,25 @@ if (contactForm) {
           }
         })
         .then(function(response) {
+          console.log('=== SECOND THEN BLOCK REACHED ===');
           if (hasAutoReply) {
             console.log('Auto-reply sent successfully', response.status, response.text);
           }
           
           // Save user data to backend (if saveUserToBackend function exists)
+          console.log('Checking for saveUserToBackend function...');
+          console.log('typeof saveUserToBackend:', typeof saveUserToBackend);
+          console.log('window.saveUserToBackend:', typeof window.saveUserToBackend);
+          console.log('Available on window:', 'saveUserToBackend' in window);
+          
           if (typeof saveUserToBackend === 'function') {
+            console.log('Calling saveUserToBackend...');
             saveUserToBackend(name, email, phone);
+          } else if (typeof window.saveUserToBackend === 'function') {
+            console.log('Calling window.saveUserToBackend...');
+            window.saveUserToBackend(name, email, phone);
+          } else {
+            console.warn('saveUserToBackend function not found!');
           }
           
           alert(`Thank you, ${name}! Your message has been sent successfully. We'll get back to you soon at ${email}.`);
