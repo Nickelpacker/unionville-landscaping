@@ -162,6 +162,12 @@ if (contactForm) {
           if (hasAutoReply) {
             console.log('Auto-reply sent successfully', response.status, response.text);
           }
+          
+          // Save user data to backend (if saveUserToBackend function exists)
+          if (typeof saveUserToBackend === 'function') {
+            saveUserToBackend(name, email, phone);
+          }
+          
           alert(`Thank you, ${name}! Your message has been sent successfully. We'll get back to you soon at ${email}.`);
           contactForm.reset();
           // Reset reCAPTCHA after successful submission
