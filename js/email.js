@@ -41,7 +41,7 @@ if (typeof emailjs !== 'undefined') {
 // Form Submission Handler
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
-  contactForm.addEventListener('submit', function(e) {
+  contactForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Check rate limit
@@ -84,8 +84,6 @@ if (contactForm) {
       message = messageInput ? messageInput.value.trim() : null;
     }
     
-    // Debug logging removed for security - form data should not be logged in production
-    
     // Simple validation
     if (!name || !email || !message) {
       alert('Please fill in all required fields (Name, Email, and Message).');
@@ -101,6 +99,45 @@ if (contactForm) {
       return;
     }
     
+    // Check if user already exists (await the promise)
+    const userExists = await checkUserExists(email);
+    if (userExists) {
+      alert('You have already submitted a message. We will get back to you soon.');
+      resetRecaptcha();
+      return;
+    }
+    
+    // Disable submit button to prevent multiple submissions
+    const submitButton = this.querySelector('.submit-button');
+    const originalText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Processing...';
+    
+    // Record this submission for rate limiting
+    recordSubmission();
+    
+    // TEMPORARILY DISABLED: Email function is disabled
+    // Skip email sending but still process the form data
+    console.log('Email function is temporarily disabled. Skipping email sending.');
+    
+    
+    if (typeof saveUserToBackend === 'function') {
+      console.log('Calling saveUserToBackend...');
+      saveUserToBackend(name, email, phone);
+    } else {
+      console.warn('saveUserToBackend function not found!');
+    }
+    
+    alert(`Thank you, ${name}! Your information has been received. (Note: Email sending is temporarily disabled)`);
+    contactForm.reset();
+    // Reset reCAPTCHA after successful submission
+    resetRecaptcha();
+    
+    // Re-enable submit button
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
+    
+    /* EMAIL SENDING CODE - TEMPORARILY DISABLED
     // Check if EmailJS is configured
     if (EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID' || 
         EMAILJS_TEMPLATE_ID === 'YOUR_TEMPLATE_ID' || 
@@ -111,15 +148,6 @@ if (contactForm) {
     
     // Check if auto-reply template is configured (optional, will skip auto-reply if not set)
     const hasAutoReply = EMAILJS_AUTOREPLY_TEMPLATE_ID !== 'YOUR_AUTOREPLY_TEMPLATE_ID';
-    
-    // Disable submit button to prevent multiple submissions
-    const submitButton = this.querySelector('.submit-button');
-    const originalText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
-    
-    // Record this submission for rate limiting
-    recordSubmission();
     
     // Prepare email parameters for sending to business
     const templateParams = {
@@ -140,8 +168,6 @@ if (contactForm) {
       to_email: email,
       from_name: 'Unionville Landscaping'
     };
-    
-    // Debug logging removed for security - customer data should not be logged
     
     // Send email using EmailJS
     if (typeof emailjs !== 'undefined') {
@@ -205,6 +231,7 @@ if (contactForm) {
       submitButton.disabled = false;
       submitButton.textContent = originalText;
     }
+    END OF DISABLED EMAIL CODE */
   });
 }
 
