@@ -1,6 +1,5 @@
 # Ignore all .md files
 *.md
-EMAILAPI/
 
 # But keep README.md
 !README.md

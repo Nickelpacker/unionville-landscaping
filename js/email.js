@@ -7,32 +7,6 @@ const EMAILJS_AUTOREPLY_TEMPLATE_ID = 'template_rcagyar'; // Template for auto-r
 const EMAILJS_PUBLIC_KEY = 'q4xfxeqEK1FaBsBEA';
 const BUSINESS_EMAIL = 'unionvillelandscaping@gmail.com';
 
-// Rate limiting to prevent abuse
-const RATE_LIMIT = {
-  maxSubmissions: 3, // Max submissions per time window
-  timeWindow: 60000, // Time window in milliseconds (60 seconds)
-  submissions: [] // Track submissions
-};
-
-// Clean old submissions outside the time window
-function cleanOldSubmissions() {
-  const now = Date.now();
-  RATE_LIMIT.submissions = RATE_LIMIT.submissions.filter(
-    timestamp => now - timestamp < RATE_LIMIT.timeWindow
-  );
-}
-
-// Check if user has exceeded rate limit
-function checkRateLimit() {
-  cleanOldSubmissions();
-  return RATE_LIMIT.submissions.length < RATE_LIMIT.maxSubmissions;
-}
-
-// Record a submission
-function recordSubmission() {
-  RATE_LIMIT.submissions.push(Date.now());
-}
-
 // Initialize EmailJS
 if (typeof emailjs !== 'undefined') {
   emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -45,11 +19,6 @@ if (contactForm) {
     e.preventDefault();
     
     // Check rate limit
-    if (!checkRateLimit()) {
-      alert('Too many submissions. Please wait a minute before trying again.');
-      resetRecaptcha();
-      return;
-    }
     
     // Verify reCAPTCHA (from recaptcha.js)
     if (!verifyRecaptcha()) {
@@ -99,7 +68,7 @@ if (contactForm) {
       return;
     }
     
-    // Check if user already exists (await the promise)
+    // Check if user already exists
     const userExists = await checkUserExists(email);
     if (userExists) {
       alert('You have already submitted a message. We will get back to you soon.');
@@ -113,10 +82,7 @@ if (contactForm) {
     submitButton.disabled = true;
     submitButton.textContent = 'Processing...';
     
-    // Record this submission for rate limiting
-    recordSubmission();
     
-    // TEMPORARILY DISABLED: Email function is disabled
     // Skip email sending but still process the form data
     console.log('Email function is temporarily disabled. Skipping email sending.');
     
@@ -130,7 +96,7 @@ if (contactForm) {
     
     alert(`Thank you, ${name}! Your information has been received. (Note: Email sending is temporarily disabled)`);
     contactForm.reset();
-    // Reset reCAPTCHA after successful submission
+
     resetRecaptcha();
     
     // Re-enable submit button

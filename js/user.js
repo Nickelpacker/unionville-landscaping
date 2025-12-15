@@ -1,7 +1,6 @@
 // Function to save user data to backend API
 // This is called from email.js after successful email submission
 function saveUserToBackend(name, email, phone) {
-    console.log("saveUserToBackend called with:", { name, email, phone });
     
     const user = {
         Name: name || '',
@@ -22,7 +21,6 @@ function saveUserToBackend(name, email, phone) {
     })
     .then(async response => {
         console.log("Backend response status:", response.status);
-        console.log("Backend response headers:", Object.fromEntries(response.headers.entries()));
         
         // Try to get error message from response
         let errorText = '';

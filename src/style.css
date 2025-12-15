@@ -566,6 +566,38 @@ body.dark-mode .form-group textarea {
   transform: translateY(-2px);
 }
 
+/* Error and Success Messages */
+.error-message,
+.success-message {
+  display: none;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  border: 1px solid #d32f2f;
+}
+
+.success-message {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  border: 1px solid #2e7d32;
+}
+
+/* Active Navigation Link */
+.nav-menu a.active {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.nav-menu a.active::after {
+  width: 100%;
+}
+
 /* Footer */
 .footer {
   background: var(--primary-color);
